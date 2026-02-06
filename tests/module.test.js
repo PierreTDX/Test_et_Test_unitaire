@@ -1,4 +1,4 @@
-import { calculateAge } from "./../module/validator.js";
+import { calculateAge } from "../module/module.js";
 
 /**
 * @function calculateAge
