@@ -52,3 +52,22 @@ export function validatePostalCode(code) {
     }
     return true;
 }
+
+/**
+ * Validate a person's identity (name/surname).
+ *
+ * @param {string} name The name to check.
+ * @return {boolean} True if the name is valid.
+ */
+export function validateIdentity(name) {
+    if (!name) {
+        throw new Error("missing param name")
+    }
+    if (typeof name !== 'string') {
+        throw new Error("name must be a string")
+    }
+    if (!/^[a-zA-Z\u00C0-\u00FF-]+$/.test(name)) {
+        throw new Error("name must only contain letters, accents and hyphens")
+    }
+    return true;
+}
