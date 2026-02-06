@@ -1,4 +1,15 @@
 /**
+ * Custom Error class for validation errors with a code.
+ */
+export class ValidationError extends Error {
+    constructor(message, code) {
+        super(message);
+        this.name = "ValidationError";
+        this.code = code;
+    }
+}
+
+/**
  * Calculate a person's age in years.
  *
  * @param {object} p An object representing a person, implementing a birth Date parameter.
@@ -6,19 +17,19 @@
  */
 export function calculateAge(p) {
     if (!p) {
-        throw new Error("missing param p")
+        throw new ValidationError("missing param p", "MISSING_PARAM")
     }
     if (typeof p !== 'object') {
-        throw new Error("param p must be an object")
+        throw new ValidationError("param p must be an object", "INVALID_TYPE")
     }
     if (!p.birth) {
-        throw new Error("missing param p.birth")
+        throw new ValidationError("missing param p.birth", "MISSING_BIRTH")
     }
     if (!(p.birth instanceof Date)) {
-        throw new Error("p.birth must be a Date object")
+        throw new ValidationError("p.birth must be a Date object", "INVALID_BIRTH_TYPE")
     }
     if (isNaN(p.birth)) {
-        throw new Error("p.birth is an invalid Date")
+        throw new ValidationError("p.birth is an invalid Date", "INVALID_DATE")
     }
 
     const today = new Date();
@@ -29,7 +40,7 @@ export function calculateAge(p) {
         age--;
     }
     if (age < 18) {
-        throw new Error("Age must be at least 18 years old.")
+        throw new ValidationError("Age must be at least 18 years old.", "MINOR")
     }
     return age;
 }
@@ -42,13 +53,13 @@ export function calculateAge(p) {
  */
 export function validatePostalCode(code) {
     if (!code) {
-        throw new Error("missing param code")
+        throw new ValidationError("missing param code", "MISSING_CODE")
     }
     if (typeof code !== 'string') {
-        throw new Error("code must be a string")
+        throw new ValidationError("code must be a string", "INVALID_TYPE")
     }
     if (!/^\d{5}$/.test(code)) {
-        throw new Error("code must be 5 digits")
+        throw new ValidationError("code must be 5 digits", "INVALID_FORMAT")
     }
     return true;
 }
@@ -61,13 +72,13 @@ export function validatePostalCode(code) {
  */
 export function validateIdentity(name) {
     if (!name) {
-        throw new Error("missing param name")
+        throw new ValidationError("missing param name", "MISSING_NAME")
     }
     if (typeof name !== 'string') {
-        throw new Error("name must be a string")
+        throw new ValidationError("name must be a string", "INVALID_TYPE")
     }
     if (!/^[a-zA-Z\u00C0-\u00FF-]+$/.test(name)) {
-        throw new Error("name must only contain letters, accents and hyphens")
+        throw new ValidationError("name must only contain letters, accents and hyphens", "INVALID_FORMAT")
     }
     return true;
 }
@@ -80,13 +91,13 @@ export function validateIdentity(name) {
  */
 export function validateEmail(email) {
     if (!email) {
-        throw new Error("missing param email")
+        throw new ValidationError("missing param email", "MISSING_EMAIL")
     }
     if (typeof email !== 'string') {
-        throw new Error("email must be a string")
+        throw new ValidationError("email must be a string", "INVALID_TYPE")
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        throw new Error("email is invalid")
+        throw new ValidationError("email is invalid", "INVALID_FORMAT")
     }
     return true;
 }
