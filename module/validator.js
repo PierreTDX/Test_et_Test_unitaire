@@ -20,8 +20,17 @@ export function calculateAge(p) {
     if (isNaN(p.birth)) {
         throw new Error("p.birth is an invalid Date")
     }
-    let dateDiff = new Date(Date.now() - p.birth.getTime())
-    let age = Math.abs(dateDiff.getUTCFullYear() - 1970);
+
+    const today = new Date();
+    let age = today.getFullYear() - p.birth.getFullYear();
+    const m = today.getMonth() - p.birth.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < p.birth.getDate())) {
+        age--;
+    }
+    if (age < 18) {
+        throw new Error("Age must be at least 18 years old.")
+    }
     return age;
 }
 
