@@ -1,4 +1,4 @@
-import { calculateAge, validatePostalCode } from "./../src/validator.js";
+import { calculateAge, validatePostalCode, validateIdentity } from "./../src/validator.js";
 
 /**
 * @function calculateAge
@@ -97,5 +97,38 @@ describe('validatePostalCode Unit Test Suites', () => {
 
     it('should throw an error when the code contains invalid characters', () => {
         expect(() => validatePostalCode("33A00")).toThrow("code must be 5 digits")
+    })
+})
+
+/**
+ * @function validateIdentity
+ */
+describe('validateIdentity Unit Test Suites', () => {
+    it('should return true for a valid name (letters only)', () => {
+        expect(validateIdentity("Pierre")).toBe(true)
+    })
+
+    it('should return true for a valid name with accents', () => {
+        expect(validateIdentity("Hélène")).toBe(true)
+    })
+
+    it('should return true for a valid name with hyphens', () => {
+        expect(validateIdentity("Jean-Pierre")).toBe(true)
+    })
+
+    it('should throw an error when no argument is passed', () => {
+        expect(() => validateIdentity()).toThrow("missing param name")
+    })
+
+    it('should throw an error when the argument is not a string', () => {
+        expect(() => validateIdentity(123)).toThrow("name must be a string")
+    })
+
+    it('should throw an error when the name contains numbers', () => {
+        expect(() => validateIdentity("Pierre123")).toThrow("name must only contain letters, accents and hyphens")
+    })
+
+    it('should throw an error for potential XSS injection', () => {
+        expect(() => validateIdentity("<script>")).toThrow("name must only contain letters, accents and hyphens")
     })
 })
