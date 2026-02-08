@@ -69,6 +69,25 @@ describe('calculateAge Unit Test Suites', () => {
     it('should throw an error for a future birth date', () => {
         expect(() => calculateAge(future)).toThrow("Age must be at least 18 years old.")
     })
+
+    it('should throw an error when p is null', () => {
+        expect(() => calculateAge(null)).toThrow("missing param p")
+    })
+
+    it('should correctly calculate age for a person born on Feb 29th (Leap Year)', () => {
+        const today = new Date();
+        // 29 Février 2000 (Année bissextile, Adulte)
+        const leapBirth = new Date(2000, 1, 29);
+
+        // Calcul manuel de l'âge attendu pour vérifier la fonction
+        let expectedAge = today.getFullYear() - 2000;
+        const m = today.getMonth() - 1; // Février est le mois 1
+        if (m < 0 || (m === 0 && today.getDate() < 29)) {
+            expectedAge--;
+        }
+
+        expect(calculateAge({ birth: leapBirth })).toEqual(expectedAge);
+    })
 })
 
 /**
