@@ -150,6 +150,10 @@ describe('validateIdentity Unit Test Suites', () => {
     it('should throw an error for potential XSS injection', () => {
         expect(() => validateIdentity("<script>")).toThrow("name must only contain letters, accents and hyphens")
     })
+
+    it('should throw an error when the name contains HTML tags', () => {
+        expect(() => validateIdentity("<b>Pierre</b>")).toThrow("name must only contain letters, accents and hyphens")
+    })
 })
 
 /**
