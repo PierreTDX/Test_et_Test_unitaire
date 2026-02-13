@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import RegistrationForm from '../pages/RegistrationForm';
 
 describe('RegistrationForm Integration Tests', () => {
@@ -61,5 +61,41 @@ describe('RegistrationForm Integration Tests', () => {
     fireEvent.blur(postalCodeInput);
 
     expect(screen.getByTestId('postalCode-error')).toBeInTheDocument();
+  });
+
+  test('successfully submits valid form and saves to localStorage', async () => {
+    render(<RegistrationForm />);
+
+    const validDate = new Date();
+    validDate.setFullYear(validDate.getFullYear() - 20);
+    const dateString = validDate.toISOString().split('T')[0];
+
+    fireEvent.change(screen.getByTestId('firstName-input'), {
+      target: { value: 'Jean' }
+    });
+    fireEvent.change(screen.getByTestId('lastName-input'), {
+      target: { value: 'Dupont' }
+    });
+    fireEvent.change(screen.getByTestId('email-input'), {
+      target: { value: 'jean.dupont@example.com' }
+    });
+    fireEvent.change(screen.getByTestId('birthDate-input'), {
+      target: { value: dateString }
+    });
+    fireEvent.change(screen.getByTestId('city-input'), {
+      target: { value: 'Paris' }
+    });
+    fireEvent.change(screen.getByTestId('postalCode-input'), {
+      target: { value: '75001' }
+    });
+
+    fireEvent.click(screen.getByTestId('submit-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('success-message')).toBeInTheDocument();
+    });
+
+    const savedData = JSON.parse(localStorage.getItem('registrations'));
+    expect(savedData).toHaveLength(1);
   });
 });
