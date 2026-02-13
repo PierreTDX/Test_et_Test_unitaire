@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/tests/RegistrationForm.test.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/tests/RegistrationForm.test.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @file RegistrationForm.test.js
  * @description Integration tests for the RegistrationForm component.
  * Verifies UI behavior, validation logic integration, and localStorage interactions.
@@ -14,7 +42,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('renders all form fields', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     expect(screen.getByLabelText(/First Name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Last Name/i)).toBeInTheDocument();
@@ -26,18 +54,18 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('renders form title', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
     expect(screen.getByText(/Registration Form/i)).toBeInTheDocument();
   });
 
   test('submit button is disabled when form is empty', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
     const submitButton = screen.getByTestId('submit-button');
     expect(submitButton).toBeDisabled();
   });
 
   test('displays error for invalid first name on blur', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const firstNameInput = screen.getByTestId('firstName-input');
 
@@ -48,7 +76,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('displays error for invalid email', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const emailInput = screen.getByTestId('email-input');
 
@@ -59,7 +87,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('displays error for invalid postal code', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const postalCodeInput = screen.getByTestId('postalCode-input');
 
@@ -70,7 +98,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('successfully submits valid form and saves to localStorage', async () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const validDate = new Date();
     validDate.setFullYear(validDate.getFullYear() - 20);
@@ -106,7 +134,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('displays error for user under 18', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const today = new Date();
     const date17YearsAgo = new Date(today.getFullYear() - 17, today.getMonth(), today.getDate());
@@ -122,7 +150,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('clears error message when user starts typing', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const firstNameInput = screen.getByTestId('firstName-input');
 
@@ -137,7 +165,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('resets form after successful submission', async () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const validDate = new Date();
     validDate.setFullYear(validDate.getFullYear() - 20);
@@ -177,7 +205,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('allows multiple valid submissions', async () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const validDate = new Date();
     validDate.setFullYear(validDate.getFullYear() - 20);
@@ -217,7 +245,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('chaotic user behavior: invalid input disables button, correction enables it', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
     const submitButton = screen.getByTestId('submit-button');
     const emailInput = screen.getByTestId('email-input');
 
@@ -237,13 +265,13 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('postal code input has maxLength of 5', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
     const postalCodeInput = screen.getByTestId('postalCode-input');
     expect(postalCodeInput).toHaveAttribute('maxLength', '5');
   });
 
   test('form inputs update correctly', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const firstNameInput = screen.getByTestId('firstName-input');
     fireEvent.change(firstNameInput, { target: { value: 'Jean' } });
@@ -255,7 +283,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('displays error when storage fails', async () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     const validDate = new Date();
     validDate.setFullYear(validDate.getFullYear() - 20);
@@ -283,7 +311,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('shows errors when submitting invalid form (bypassing disabled button)', () => {
-    const { container } = render(<RegistrationForm />);
+    const { container } = render(&lt;RegistrationForm />);
     const form = container.querySelector('form');
 
     fireEvent.submit(form);
@@ -293,7 +321,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('displays error for invalid last name on blur', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
     const lastNameInput = screen.getByTestId('lastName-input');
     fireEvent.change(lastNameInput, { target: { value: '123' } });
     fireEvent.blur(lastNameInput);
@@ -301,7 +329,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('displays error for invalid city on blur', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
     const cityInput = screen.getByTestId('city-input');
     fireEvent.change(cityInput, { target: { value: 'Paris75' } });
     fireEvent.blur(cityInput);
@@ -309,7 +337,7 @@ describe('RegistrationForm Integration Tests', () => {
   });
 
   test('does not display error for valid values on blur', () => {
-    render(<RegistrationForm />);
+    render(&lt;RegistrationForm />);
 
     // Test valid first name
     const firstNameInput = screen.getByTestId('firstName-input');
@@ -319,4 +347,26 @@ describe('RegistrationForm Integration Tests', () => {
     // Verify no error is shown
     expect(screen.queryByTestId('firstName-error')).not.toBeInTheDocument();
   });
-});
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components.html">Components</a></li><li><a href="module-validator.html">validator</a></li></ul><h3>Classes</h3><ul><li><a href="module-validator.ValidationError.html">ValidationError</a></li></ul><h3>Global</h3><ul><li><a href="global.html#LocalStorage">LocalStorage</a></li><li><a href="global.html#calculateAge">calculateAge</a></li><li><a href="global.html#runScenario">runScenario</a></li><li><a href="global.html#validateCity">validateCity</a></li><li><a href="global.html#validateEmail">validateEmail</a></li><li><a href="global.html#validateIdentity">validateIdentity</a></li><li><a href="global.html#validatePostalCode">validatePostalCode</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Fri Feb 13 2026 15:35:54 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

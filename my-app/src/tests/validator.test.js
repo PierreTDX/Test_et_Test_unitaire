@@ -1,3 +1,7 @@
+/**
+ * @file validator.test.js
+ * @description Unit tests for the validator utility module.
+ */
 import { calculateAge, validatePostalCode, validateIdentity, validateEmail, validateCity, saveToLocalStorage, getFromLocalStorage } from "../../src/utils/validator.js";
 
 /**

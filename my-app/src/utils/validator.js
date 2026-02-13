@@ -1,4 +1,9 @@
 /**
+ * @file validator.js
+ * @description Utility module containing validation functions and error handling for the registration process.
+ * @module validator
+ */
+/**
  * Custom Error class for validation errors with a code.
  */
 export class ValidationError extends Error {
