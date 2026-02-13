@@ -98,4 +98,153 @@ describe('RegistrationForm Integration Tests', () => {
     const savedData = JSON.parse(localStorage.getItem('registrations'));
     expect(savedData).toHaveLength(1);
   });
+
+  test('displays error for user under 18', () => {
+    render(<RegistrationForm />);
+
+    const today = new Date();
+    const date17YearsAgo = new Date(today.getFullYear() - 17, today.getMonth(), today.getDate());
+    const dateString = date17YearsAgo.toISOString().split('T')[0];
+
+    const birthDateInput = screen.getByTestId('birthDate-input');
+
+    fireEvent.change(birthDateInput, { target: { value: dateString } });
+    fireEvent.blur(birthDateInput);
+
+    expect(screen.getByTestId('birthDate-error')).toBeInTheDocument();
+    expect(screen.getByTestId('birthDate-error')).toHaveTextContent(/18 years old/i);
+  });
+
+  test('clears error message when user starts typing', () => {
+    render(<RegistrationForm />);
+
+    const firstNameInput = screen.getByTestId('firstName-input');
+
+    // Trigger error via blur
+    fireEvent.change(firstNameInput, { target: { value: '123' } });
+    fireEvent.blur(firstNameInput);
+    expect(screen.getByTestId('firstName-error')).toBeInTheDocument();
+
+    // Start typing
+    fireEvent.change(firstNameInput, { target: { value: 'Jean' } });
+    expect(screen.queryByTestId('firstName-error')).not.toBeInTheDocument();
+  });
+
+  test('resets form after successful submission', async () => {
+    render(<RegistrationForm />);
+
+    const validDate = new Date();
+    validDate.setFullYear(validDate.getFullYear() - 20);
+    const dateString = validDate.toISOString().split('T')[0];
+
+    // Fill and submit form
+    fireEvent.change(screen.getByTestId('firstName-input'), {
+      target: { value: 'Jean' }
+    });
+    fireEvent.change(screen.getByTestId('lastName-input'), {
+      target: { value: 'Dupont' }
+    });
+    fireEvent.change(screen.getByTestId('email-input'), {
+      target: { value: 'jean@example.com' }
+    });
+    fireEvent.change(screen.getByTestId('birthDate-input'), {
+      target: { value: dateString }
+    });
+    fireEvent.change(screen.getByTestId('city-input'), {
+      target: { value: 'Paris' }
+    });
+    fireEvent.change(screen.getByTestId('postalCode-input'), {
+      target: { value: '75001' }
+    });
+
+    fireEvent.click(screen.getByTestId('submit-button'));
+
+    // Check that form is reset
+    await waitFor(() => {
+      expect(screen.getByTestId('firstName-input')).toHaveValue('');
+      expect(screen.getByTestId('lastName-input')).toHaveValue('');
+      expect(screen.getByTestId('email-input')).toHaveValue('');
+      expect(screen.getByTestId('birthDate-input')).toHaveValue('');
+      expect(screen.getByTestId('city-input')).toHaveValue('');
+      expect(screen.getByTestId('postalCode-input')).toHaveValue('');
+    });
+  });
+
+  test('allows multiple valid submissions', async () => {
+    render(<RegistrationForm />);
+
+    const validDate = new Date();
+    validDate.setFullYear(validDate.getFullYear() - 20);
+    const dateString = validDate.toISOString().split('T')[0];
+
+    // First submission
+    fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Jean' } });
+    fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Dupont' } });
+    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'jean@example.com' } });
+    fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: dateString } });
+    fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Paris' } });
+    fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '75001' } });
+    fireEvent.click(screen.getByTestId('submit-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('success-message')).toBeInTheDocument();
+    });
+
+    // Second submission
+    fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Marie' } });
+    fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Martin' } });
+    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'marie@example.com' } });
+    fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: dateString } });
+    fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Lyon' } });
+    fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '69001' } });
+    fireEvent.click(screen.getByTestId('submit-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('success-message')).toBeInTheDocument();
+    });
+
+    // Verify both are saved
+    const savedData = JSON.parse(localStorage.getItem('registrations'));
+    expect(savedData).toHaveLength(2);
+    expect(savedData[0].firstName).toBe('Jean');
+    expect(savedData[1].firstName).toBe('Marie');
+  });
+
+  test('chaotic user behavior: invalid input disables button, correction enables it', () => {
+    render(<RegistrationForm />);
+    const submitButton = screen.getByTestId('submit-button');
+    const emailInput = screen.getByTestId('email-input');
+
+    // Button initially disabled
+    expect(submitButton).toBeDisabled();
+
+    // User types invalid email
+    fireEvent.change(emailInput, { target: { value: 'bad-email' } });
+    fireEvent.blur(emailInput);
+    expect(screen.getByTestId('email-error')).toBeInTheDocument();
+    expect(submitButton).toBeDisabled();
+
+    // User corrects email (but other fields still empty)
+    fireEvent.change(emailInput, { target: { value: 'good@email.com' } });
+    expect(screen.queryByTestId('email-error')).not.toBeInTheDocument();
+    expect(submitButton).toBeDisabled(); // Still disabled because other fields are empty
+  });
+
+  test('postal code input has maxLength of 5', () => {
+    render(<RegistrationForm />);
+    const postalCodeInput = screen.getByTestId('postalCode-input');
+    expect(postalCodeInput).toHaveAttribute('maxLength', '5');
+  });
+
+  test('form inputs update correctly', () => {
+    render(<RegistrationForm />);
+
+    const firstNameInput = screen.getByTestId('firstName-input');
+    fireEvent.change(firstNameInput, { target: { value: 'Jean' } });
+    expect(firstNameInput).toHaveValue('Jean');
+
+    const emailInput = screen.getByTestId('email-input');
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    expect(emailInput).toHaveValue('test@example.com');
+  });
 });
