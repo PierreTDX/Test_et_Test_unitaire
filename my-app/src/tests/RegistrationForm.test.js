@@ -40,4 +40,26 @@ describe('RegistrationForm Integration Tests', () => {
 
     expect(screen.getByTestId('firstName-error')).toBeInTheDocument();
   });
+
+  test('displays error for invalid email', () => {
+    render(<RegistrationForm />);
+
+    const emailInput = screen.getByTestId('email-input');
+
+    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    fireEvent.blur(emailInput);
+
+    expect(screen.getByTestId('email-error')).toBeInTheDocument();
+  });
+
+  test('displays error for invalid postal code', () => {
+    render(<RegistrationForm />);
+
+    const postalCodeInput = screen.getByTestId('postalCode-input');
+
+    fireEvent.change(postalCodeInput, { target: { value: '123' } });
+    fireEvent.blur(postalCodeInput);
+
+    expect(screen.getByTestId('postalCode-error')).toBeInTheDocument();
+  });
 });
