@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1770983137964" clover="3.2.0">
-  <project timestamp="1770983137964" name="All files">
-    <metrics statements="104" coveredstatements="67" conditionals="79" coveredconditionals="59" methods="15" coveredmethods="10" elements="198" coveredelements="136" complexity="0" loc="104" ncloc="104" packages="2" files="3" classes="3"/>
+<coverage generated="1770984334855" clover="3.2.0">
+  <project timestamp="1770984334855" name="All files">
+    <metrics statements="104" coveredstatements="67" conditionals="79" coveredconditionals="59" methods="15" coveredmethods="10" elements="198" coveredelements="136" complexity="0" loc="104" ncloc="104" packages="3" files="3" classes="3"/>
     <package name="src">
-      <metrics statements="46" coveredstatements="9" conditionals="34" coveredconditionals="14" methods="7" coveredmethods="2"/>
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="App.js" path="C:\Users\pierr\Documents\Ynov\Cours\Tests\Activite1\my-app\src\App.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="5" count="1" type="stmt"/>
       </file>
-      <file name="RegistrationForm.js" path="C:\Users\pierr\Documents\Ynov\Cours\Tests\Activite1\my-app\src\RegistrationForm.js">
+    </package>
+    <package name="src.pages">
+      <metrics statements="45" coveredstatements="8" conditionals="34" coveredconditionals="14" methods="6" coveredmethods="1"/>
+      <file name="RegistrationForm.js" path="C:\Users\pierr\Documents\Ynov\Cours\Tests\Activite1\my-app\src\pages\RegistrationForm.js">
         <metrics statements="45" coveredstatements="8" conditionals="34" coveredconditionals="14" methods="6" coveredmethods="1"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>

@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+/* ── Keyframes ── */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(0, 225, 255, 0.3), 0 0 20px rgba(0, 225, 255, 0.1); }
+  50% { box-shadow: 0 0 15px rgba(0, 225, 255, 0.5), 0 0 40px rgba(0, 225, 255, 0.2); }
+}
+
+@keyframes border-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fade-slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes scan-line {
+  0% { top: -100%; }
+  100% { top: 200%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes error-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+@keyframes success-pop {
+  0% { opacity: 0; transform: scale(0.8) translateY(-10px); }
+  50% { transform: scale(1.03) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Container ── */
+.registration-form-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #06080f;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(0, 225, 255, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(120, 0, 255, 0.04) 0%, transparent 60%);
+  font-family: 'Rajdhani', sans-serif;
+  color: #c8d6e5;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid overlay */
+.registration-form-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 225, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 225, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* Scan line effect */
+.registration-form-container::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(transparent, rgba(0, 225, 255, 0.015), transparent);
+  animation: scan-line 8s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Title ── */
+.registration-form-container h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 2rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(135deg, #00e1ff, #7b2fff, #00e1ff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+  animation: fade-slide-up 0.8s ease-out, shimmer 4s linear infinite;
+}
+
+/* ── Form ── */
+.registration-form {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.5rem;
+  border-radius: 16px;
+  background: rgba(10, 15, 30, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 225, 255, 0.12);
+  position: relative;
+  animation: fade-slide-up 1s ease-out, glow-pulse 4s ease-in-out infinite;
+}
+
+/* Gradient border accent */
+.registration-form::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 225, 255, 0.3), rgba(123, 47, 255, 0.15), rgba(0, 225, 255, 0.05));
+  background-size: 300% 300%;
+  animation: border-flow 6s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Form Groups ── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  z-index: 1;
+  animation: fade-slide-up 0.6s ease-out backwards;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.18s; }
+.form-group:nth-child(3) { animation-delay: 0.26s; }
+.form-group:nth-child(4) { animation-delay: 0.34s; }
+.form-group:nth-child(5) { animation-delay: 0.42s; }
+.form-group:nth-child(6) { animation-delay: 0.5s; }
+
+/* ── Labels ── */
+.form-group label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(0, 225, 255, 0.7);
+  transition: color 0.3s ease;
+}
+
+.form-group:focus-within label {
+  color: #00e1ff;
+  text-shadow: 0 0 8px rgba(0, 225, 255, 0.4);
+}
+
+/* ── Inputs ── */
+.form-group input {
+  padding: 0.75rem 1rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e8f0fe;
+  background: rgba(0, 225, 255, 0.03);
+  border: 1px solid rgba(0, 225, 255, 0.15);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-group input::placeholder {
+  color: rgba(200, 214, 229, 0.3);
+}
+
+.form-group input:focus {
+  border-color: rgba(0, 225, 255, 0.6);
+  background: rgba(0, 225, 255, 0.06);
+  box-shadow:
+    0 0 0 3px rgba(0, 225, 255, 0.08),
+    0 0 20px rgba(0, 225, 255, 0.08) inset;
+}
+
+.form-group input:hover:not(:focus) {
+  border-color: rgba(0, 225, 255, 0.3);
+}
+
+/* Date input color scheme */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(1) saturate(5) hue-rotate(160deg);
+  cursor: pointer;
+  transition: filter 0.3s;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(0.9) sepia(1) saturate(5) hue-rotate(160deg);
+}
+
+/* ── Error States ── */
+.form-group input.error {
+  border-color: rgba(255, 50, 80, 0.6);
+  background: rgba(255, 50, 80, 0.05);
+  animation: error-shake 0.4s ease;
+}
+
+.form-group input.error:focus {
+  box-shadow:
+    0 0 0 3px rgba(255, 50, 80, 0.1),
+    0 0 15px rgba(255, 50, 80, 0.06) inset;
+}
+
+.error-message {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #ff3250;
+  padding-left: 0.25rem;
+  animation: fade-slide-up 0.3s ease-out;
+  text-shadow: 0 0 10px rgba(255, 50, 80, 0.3);
+}
+
+/* ── Success Message ── */
+.success-message {
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #00ffb2;
+  background: rgba(0, 255, 178, 0.06);
+  border: 1px solid rgba(0, 255, 178, 0.2);
+  border-radius: 10px;
+  animation: success-pop 0.5s ease-out;
+  text-shadow: 0 0 12px rgba(0, 255, 178, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 178, 0.06);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Submit Button ── */
+.submit-button {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.5rem;
+  padding: 0.85rem 2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #06080f;
+  background: linear-gradient(135deg, #00e1ff, #00b4cc);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.submit-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.25) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+  border-radius: 8px;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 20px rgba(0, 225, 255, 0.4),
+    0 0 60px rgba(0, 225, 255, 0.15);
+  background: linear-gradient(135deg, #00f0ff, #00d4f0);
+}
+
+.submit-button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+/* ── Responsive ── */
+@media (max-width: 540px) {
+  .registration-form-container {
+    padding: 1.25rem;
+  }
+
+  .registration-form {
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .registration-form-container h1 {
+    font-size: 1.4rem;
+  }
+}
