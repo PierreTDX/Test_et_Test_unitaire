@@ -286,4 +286,32 @@ describe('RegistrationForm Integration Tests', () => {
     expect(screen.getByTestId('firstName-error')).toBeInTheDocument();
     expect(screen.queryByTestId('success-message')).not.toBeInTheDocument();
   });
+
+  test('displays error for invalid last name on blur', () => {
+    render(<RegistrationForm />);
+    const lastNameInput = screen.getByTestId('lastName-input');
+    fireEvent.change(lastNameInput, { target: { value: '123' } });
+    fireEvent.blur(lastNameInput);
+    expect(screen.getByTestId('lastName-error')).toBeInTheDocument();
+  });
+
+  test('displays error for invalid city on blur', () => {
+    render(<RegistrationForm />);
+    const cityInput = screen.getByTestId('city-input');
+    fireEvent.change(cityInput, { target: { value: 'Paris75' } });
+    fireEvent.blur(cityInput);
+    expect(screen.getByTestId('city-error')).toBeInTheDocument();
+  });
+
+  test('does not display error for valid values on blur', () => {
+    render(<RegistrationForm />);
+
+    // Test valid first name
+    const firstNameInput = screen.getByTestId('firstName-input');
+    fireEvent.change(firstNameInput, { target: { value: 'Pierre' } });
+    fireEvent.blur(firstNameInput);
+
+    // Verify no error is shown
+    expect(screen.queryByTestId('firstName-error')).not.toBeInTheDocument();
+  });
 });
