@@ -28,8 +28,8 @@ L'objectif est de fournir des fonctions de validation robustes respectant les co
 Assurez-vous d'avoir Node.js installé et Npm.
 
 ```bash
-git clone https://github.com/PierreTDX/TestsUnitairesActivite1Validator.git
-cd TestsUnitairesActivite1Validator
+git clone https://github.com/PierreTDX/Test_et_Test_unitaire
+cd my-app
 npm install
 ```
 

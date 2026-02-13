@@ -1,6 +1,6 @@
 # Intégration React & Tests d'Interface (Activité 2)
 ## Réalisé par Pierre TONDEUX le 13/02/2026
-
+repo : https://github.com/PierreTDX/Test_et_Test_unitaire.git
 
 Ce projet constitue la seconde étape du fil rouge. Il consiste à intégrer le module de validation `validator.js` (développé en activité 1) dans une interface utilisateur **React**, tout en garantissant la robustesse de l'application via des **Tests d'Intégration**.
 
@@ -31,8 +31,8 @@ Les tests automatisés valident le comportement du DOM :
 Assurez-vous d'avoir Node.js installé.
 
 ```bash
-git clone https://github.com/PierreTDX/TestsUnitairesActivite1Validator.git
-cd TestsUnitairesActivite1Validator
+git clone https://github.com/PierreTDX/Test_et_Test_unitaire
+cd my-app
 npm install
 ```
 
