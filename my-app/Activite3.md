@@ -34,7 +34,7 @@ Le workflow est défini dans `.github/workflows/build_test_react.yml`.
     *   `npm run jsdoc` (génération de la doc avant le build pour l'inclure dans l'artefact).
     *   `npm run build` (création de l'artefact de production).
 4.  **Test** : Exécution de `npm test` avec couverture.
-5.  **Codecov** : Upload du rapport de couverture.
+5.  **Codecov** : Upload du rapport de couverture. (doc : https://github.com/marketplace/actions/codecov)
 6.  **Deploy** : Déploiement du dossier `build` (contenant l'app et la doc) sur GitHub Pages.
 
 ---
