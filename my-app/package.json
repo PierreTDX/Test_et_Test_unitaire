@@ -24,7 +24,7 @@
     "test": "react-scripts test --coverage --collectCoverageFrom=src/**/*.{js,jsx,ts,tsx} --collectCoverageFrom=!src/reportWebVitals.js --collectCoverageFrom=!src/index.js --collectCoverageFrom=!src/run-scenarios.js --watchAll=false",
     "testjest": "jest --coverage",
     "eject": "react-scripts eject",
-    "jsdoc": "jsdoc -c ./jsdoc.config.json -r -d ./docs",
+    "jsdoc": "jsdoc -R ../README.md -c ./jsdoc.config.json -r -d ./public/docs",
     "scenarios": "node src/run-scenarios.js"
   },
   "eslintConfig": {
