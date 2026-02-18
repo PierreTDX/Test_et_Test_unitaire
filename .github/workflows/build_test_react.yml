@@ -39,4 +39,4 @@ jobs:
         with:
         # Upload entire repository
           path: ./my-app/build
-          if-no-files-found: error
+          # if-no-files-found: error
