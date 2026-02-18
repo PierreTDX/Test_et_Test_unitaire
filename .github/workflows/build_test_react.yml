@@ -38,5 +38,5 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
         # Upload entire repository
-        path: build
+        path: ./my-app/build
         if-no-files-found: error
