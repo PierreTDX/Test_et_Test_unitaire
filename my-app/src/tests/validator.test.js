@@ -84,10 +84,10 @@ describe('calculateAge Unit Test Suites', () => {
 
     it('should correctly calculate age for a person born on Feb 29th (Leap Year)', () => {
         const today = new Date();
-        // 29 Février 2000 (Année bissextile, Adulte)
+        // February 29, 2000 (Leap Year, Adult)
         const leapBirth = new Date(2000, 1, 29);
 
-        // Calcul manuel de l'âge attendu pour vérifier la fonction
+        // Manual calculation of expected age to verify the function
         let expectedAge = today.getFullYear() - 2000;
         const m = today.getMonth() - 1; // Février est le mois 1
         if (m < 0 || (m === 0 && today.getDate() < 29)) {

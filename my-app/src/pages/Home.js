@@ -2,9 +2,8 @@
  * @file Home.js
  * @description Home page component displaying the list of registered users.
  */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { getFromLocalStorage } from '../utils/validator';
 import '../styles/Home.css';
 
 /**
@@ -12,23 +11,19 @@ import '../styles/Home.css';
  * Fetches and displays users from local storage.
  *
  * @memberof module:Components
+ * @param {Object} props
+ * @param {Array} props.users - List of registered users passed from App
  * @returns {JSX.Element} The rendered home page.
  */
-const Home = () => {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        try {
-            const data = getFromLocalStorage();
-            setUsers(data);
-        } catch (error) {
-            console.error("Error loading users", error);
-        }
-    }, []);
-
+const Home = ({ users = [] }) => {
     return (
         <div className="home-container">
             <h1>Registered Users</h1>
+            {users.length > 0 && (
+                <h2>
+                    {users.length} registered user{users.length > 1 ? 's' : ''}
+                </h2>
+            )}
 
             <div className="user-list">
                 {users.length === 0 ? (

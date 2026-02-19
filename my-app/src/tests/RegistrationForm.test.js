@@ -7,7 +7,6 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import RegistrationForm from '../pages/RegistrationForm';
-import * as validator from '../utils/validator';
 
 describe('RegistrationForm Integration Tests', () => {
   beforeEach(() => {
@@ -75,8 +74,9 @@ describe('RegistrationForm Integration Tests', () => {
     expect(screen.getByTestId('postalCode-error')).toBeInTheDocument();
   });
 
-  test('successfully submits valid form and saves to localStorage', async () => {
-    renderWithRouter(<RegistrationForm />);
+  test('successfully submits valid form and calls onUserAdd', async () => {
+    const mockOnUserAdd = jest.fn();
+    renderWithRouter(<RegistrationForm onUserAdd={mockOnUserAdd} />);
 
     const validDate = new Date();
     validDate.setFullYear(validDate.getFullYear() - 20);
@@ -107,8 +107,7 @@ describe('RegistrationForm Integration Tests', () => {
       expect(screen.getByTestId('success-message')).toBeInTheDocument();
     });
 
-    const savedData = JSON.parse(localStorage.getItem('registrations'));
-    expect(savedData).toHaveLength(1);
+    expect(mockOnUserAdd).toHaveBeenCalledTimes(1);
   });
 
   test('displays error for user under 18', () => {
@@ -154,9 +153,11 @@ describe('RegistrationForm Integration Tests', () => {
     expect(screen.queryByTestId('firstName-error')).not.toBeInTheDocument();
   });
 
-  test('resets form after successful submission', async () => {
-    renderWithRouter(<RegistrationForm />);
-
+  // Note: Form reset is no longer easily testable due to redirection
+  // But we can verify that onUserAdd is called
+  test('calls onUserAdd with correct data', async () => {
+    const mockOnUserAdd = jest.fn();
+    renderWithRouter(<RegistrationForm onUserAdd={mockOnUserAdd} />);
     const validDate = new Date();
     validDate.setFullYear(validDate.getFullYear() - 20);
     const dateString = validDate.toISOString().split('T')[0];
@@ -183,7 +184,26 @@ describe('RegistrationForm Integration Tests', () => {
 
     fireEvent.click(screen.getByTestId('submit-button'));
 
-    // Check that form is reset
+    expect(mockOnUserAdd).toHaveBeenCalled();
+  });
+
+  test('resets form after successful submission', async () => {
+    const mockOnUserAdd = jest.fn();
+    renderWithRouter(<RegistrationForm onUserAdd={mockOnUserAdd} />);
+
+    const validDate = new Date();
+    validDate.setFullYear(validDate.getFullYear() - 20);
+    const dateString = validDate.toISOString().split('T')[0];
+
+    fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Jean' } });
+    fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Dupont' } });
+    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'jean@example.com' } });
+    fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: dateString } });
+    fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Paris' } });
+    fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '75001' } });
+
+    fireEvent.click(screen.getByTestId('submit-button'));
+
     await waitFor(() => {
       expect(screen.getByTestId('firstName-input')).toHaveValue('');
       expect(screen.getByTestId('lastName-input')).toHaveValue('');
@@ -194,44 +214,31 @@ describe('RegistrationForm Integration Tests', () => {
     });
   });
 
-  test('allows multiple valid submissions', async () => {
-    renderWithRouter(<RegistrationForm />);
+  test('displays error when parent component throws error (e.g. storage full)', async () => {
+    // Simulate an error coming from the parent (App.js)
+    const mockOnUserAdd = jest.fn().mockImplementation(() => {
+      throw new Error('Storage quota exceeded');
+    });
+
+    renderWithRouter(<RegistrationForm onUserAdd={mockOnUserAdd} />);
 
     const validDate = new Date();
     validDate.setFullYear(validDate.getFullYear() - 20);
     const dateString = validDate.toISOString().split('T')[0];
 
-    // First submission
     fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Jean' } });
     fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Dupont' } });
     fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'jean@example.com' } });
     fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: dateString } });
     fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Paris' } });
     fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '75001' } });
+
     fireEvent.click(screen.getByTestId('submit-button'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('success-message')).toBeInTheDocument();
+      expect(screen.getByTestId('submit-error')).toBeInTheDocument();
+      expect(screen.getByTestId('submit-error')).toHaveTextContent('Storage quota exceeded');
     });
-
-    // Second submission
-    fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Marie' } });
-    fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Martin' } });
-    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'marie@example.com' } });
-    fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: dateString } });
-    fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Lyon' } });
-    fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '69001' } });
-    fireEvent.click(screen.getByTestId('submit-button'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('success-message')).toBeInTheDocument();
-    });
-
-    // Verify both are saved
-    const savedData = JSON.parse(localStorage.getItem('registrations'));
-    expect(savedData).toHaveLength(2);
-    expect(savedData[0].firstName).toBe('Jean');
-    expect(savedData[1].firstName).toBe('Marie');
   });
 
   test('chaotic user behavior: invalid input disables button, correction enables it', () => {
@@ -270,34 +277,6 @@ describe('RegistrationForm Integration Tests', () => {
     const emailInput = screen.getByTestId('email-input');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     expect(emailInput).toHaveValue('test@example.com');
-  });
-
-  test('displays error when storage fails', async () => {
-    renderWithRouter(<RegistrationForm />);
-
-    const validDate = new Date();
-    validDate.setFullYear(validDate.getFullYear() - 20);
-    const dateString = validDate.toISOString().split('T')[0];
-
-    fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Jean' } });
-    fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Dupont' } });
-    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'jean@example.com' } });
-    fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: dateString } });
-    fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Paris' } });
-    fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '75001' } });
-
-    const saveSpy = jest.spyOn(validator, 'saveToLocalStorage').mockImplementation(() => {
-      throw new Error('Storage quota exceeded');
-    });
-
-    fireEvent.click(screen.getByTestId('submit-button'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('submit-error')).toBeInTheDocument();
-      expect(screen.getByTestId('submit-error')).toHaveTextContent('Storage quota exceeded');
-    });
-
-    saveSpy.mockRestore();
   });
 
   test('shows errors when submitting invalid form (bypassing disabled button)', () => {

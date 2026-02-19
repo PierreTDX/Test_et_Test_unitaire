@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 import React from 'react';
 import '@testing-library/jest-dom';
+import * as validator from '../utils/validator';
 
 test('renders home page by default', () => {
   render(
@@ -31,4 +32,28 @@ test('renders registration page directly on specific route', () => {
     </MemoryRouter>
   );
   expect(screen.getByText(/Registration Form/i)).toBeInTheDocument();
+});
+
+test('handles error when loading users gracefully', () => {
+  // Mock console.error to avoid polluting test output
+  const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
+
+  // Mock getFromLocalStorage to throw an error
+  jest.spyOn(validator, 'getFromLocalStorage').mockImplementation(() => {
+    throw new Error('Storage access denied');
+  });
+
+  render(
+    <MemoryRouter>
+      <App />
+    </MemoryRouter>
+  );
+
+  // Verify error was logged (message matches App.js) and component didn't crash
+  expect(consoleSpy).toHaveBeenCalledWith("Error loading initial data", expect.any(Error));
+  expect(screen.getByText(/Registered Users/i)).toBeInTheDocument();
+
+  // Cleanup
+  consoleSpy.mockRestore();
+  jest.restoreAllMocks();
 });

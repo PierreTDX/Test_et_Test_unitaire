@@ -7,7 +7,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Home from '../pages/Home';
-import * as validator from '../utils/validator';
 
 describe('Home Page Integration Tests', () => {
     // Reset mocks after each test to ensure clean state
@@ -21,14 +20,12 @@ describe('Home Page Integration Tests', () => {
     };
 
     test('renders home page title', () => {
-        jest.spyOn(validator, 'getFromLocalStorage').mockReturnValue([]);
-        renderWithRouter(<Home />);
+        renderWithRouter(<Home users={[]} />);
         expect(screen.getByText(/Registered Users/i)).toBeInTheDocument();
     });
 
     test('displays message when no users are registered', () => {
-        jest.spyOn(validator, 'getFromLocalStorage').mockReturnValue([]);
-        renderWithRouter(<Home />);
+        renderWithRouter(<Home users={[]} />);
         expect(screen.getByText(/No users registered yet/i)).toBeInTheDocument();
     });
 
@@ -54,13 +51,9 @@ describe('Home Page Integration Tests', () => {
             }
         ];
 
-        // Mock the storage retrieval
-        jest.spyOn(validator, 'getFromLocalStorage').mockReturnValue(mockUsers);
+        renderWithRouter(<Home users={mockUsers} />);
 
-        renderWithRouter(<Home />);
-
-        // Use findByText to wait for the re-render caused by useEffect
-        expect(await screen.findByText('Jean Dupont')).toBeInTheDocument();
+        expect(screen.getByText('Jean Dupont')).toBeInTheDocument();
         expect(screen.getByText('Marie Curie')).toBeInTheDocument();
 
         // Check for other details
@@ -72,27 +65,10 @@ describe('Home Page Integration Tests', () => {
     });
 
     test('renders link to registration page', () => {
-        jest.spyOn(validator, 'getFromLocalStorage').mockReturnValue([]);
-        renderWithRouter(<Home />);
+        renderWithRouter(<Home users={[]} />);
 
         const link = screen.getByRole('link', { name: /Go to Registration/i });
         expect(link).toBeInTheDocument();
         expect(link).toHaveAttribute('href', '/registration');
-    });
-
-    test('handles error when loading users gracefully', () => {
-        // Mock console.error to avoid polluting test output
-        const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
-
-        // Mock getFromLocalStorage to throw an error
-        jest.spyOn(validator, 'getFromLocalStorage').mockImplementation(() => {
-            throw new Error('Storage access denied');
-        });
-
-        renderWithRouter(<Home />);
-
-        // Verify error was logged and component didn't crash
-        expect(consoleSpy).toHaveBeenCalledWith("Error loading users", expect.any(Error));
-        expect(screen.getByText(/Registered Users/i)).toBeInTheDocument();
     });
 });

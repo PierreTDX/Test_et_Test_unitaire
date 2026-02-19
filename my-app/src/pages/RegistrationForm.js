@@ -3,8 +3,8 @@
  * @description Main registration form component handling user interactions and validation.
  */
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { validateIdentity, validateEmail, validatePostalCode, validateCity, calculateAge, saveToLocalStorage } from '../utils/validator.js';
+import { Link, useNavigate } from 'react-router-dom';
+import { validateIdentity, validateEmail, validatePostalCode, validateCity, calculateAge } from '../utils/validator.js';
 import '../styles/RegistrationForm.css';
 
 /**
@@ -12,9 +12,11 @@ import '../styles/RegistrationForm.css';
  * Handles user input, validation, and submission to local storage.
  *
  * @memberof module:Components
+ * @param {Object} props
+ * @param {Function} props.onUserAdd - Function to call on successful registration
  * @returns {JSX.Element} The rendered registration form.
  */
-const RegistrationForm = () => {
+const RegistrationForm = ({ onUserAdd }) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -26,6 +28,7 @@ const RegistrationForm = () => {
 
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate();
 
     /**
      * Handles input changes.
@@ -152,7 +155,10 @@ const RegistrationForm = () => {
 
         if (validation.isValid) {
             try {
-                saveToLocalStorage(formData);
+                // call onUserAdd to update App's state and localStorage
+                if (onUserAdd) {
+                    onUserAdd(formData);
+                }
                 setSuccessMessage('Registration successful!');
                 setErrors({});
                 // Reset form
@@ -164,6 +170,8 @@ const RegistrationForm = () => {
                     city: '',
                     postalCode: ''
                 });
+                // redirect to home after a short delay to show success message
+                setTimeout(() => navigate('/'), 3000);
             } catch (e) {
                 setErrors({ submit: e.message });
             }
