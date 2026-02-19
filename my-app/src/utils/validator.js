@@ -99,7 +99,7 @@ export function validateIdentity(name) {
  *
  * @param {string} email The email to check.
  * @return {boolean} True if the email is valid.
- * @throws {ValidationError} If email is missing, not a string, or invalid format.
+ * @throws {ValidationError} If email is missing, not a string, invalid format, or already exists.
  */
 export function validateEmail(email) {
     if (!email) {
@@ -110,6 +110,18 @@ export function validateEmail(email) {
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         throw new ValidationError("email is invalid", "INVALID_FORMAT")
+    }
+
+    // Check uniqueness against localStorage
+    try {
+        const users = getFromLocalStorage();
+        if (users.some(user => user.email === email)) {
+            throw new ValidationError("email already exists", "EMAIL_EXISTS");
+        }
+    } catch (error) {
+        if (error.code === "EMAIL_EXISTS") {
+            throw error;
+        }
     }
     return true;
 }

@@ -183,6 +183,15 @@ describe('validateEmail Unit Test Suites', () => {
     it('should throw an error when the email is invalid', () => {
         expect(() => validateEmail("invalid-email")).toThrow("email is invalid")
     })
+
+    it('should throw an error when the email already exists', () => {
+        const existingUsers = [{ email: "duplicate@test.com" }];
+        localStorage.setItem('registrations', JSON.stringify(existingUsers));
+
+        expect(() => validateEmail("duplicate@test.com")).toThrow("email already exists");
+
+        localStorage.removeItem('registrations');
+    })
 })
 
 /**
