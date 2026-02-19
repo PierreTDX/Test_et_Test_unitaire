@@ -23,7 +23,14 @@ Intégration du module dans un formulaire d'inscription React (`RegistrationForm
 Mise en place d'une usine logicielle complète avec GitHub Actions.
 *   **Objectif** : Automatiser les tests, la génération de documentation et le déploiement.
 *   **Outils** : GitHub Actions, Codecov, GitHub Pages.
-*   **Résultat** : À chaque push, le code est testé, la couverture vérifiée, et l'application (avec sa doc) est redéployée en production.
+*   **Résultat** : À chaque push, le code est testé, la couverture vérifiée, et l'application (avec sa doc) est redéployée en production.  
+
+### Activité 4 : E2E & Cohérence des Tests (Fullstack Testing)
+Évolution vers une architecture SPA (Single Page Application) et validation des parcours complets.
+*   **Objectif** : Garantir la persistance des données et la navigation fluide entre les vues.
+*   **Architecture** : Mise en place de `react-router-dom` et gestion d'état partagé (Lift State Up).
+*   **Tests E2E** : Implémentation de scénarios nominaux et d'erreurs avec **Cypress** (ex: Ajout utilisateur -> Vérification liste Accueil).
+*   **Pyramide de Tests** : Corrélation entre TU (règles), TI (composants) et E2E (parcours).
 
 ---
 
@@ -55,13 +62,15 @@ Mise en place d'une usine logicielle complète avec GitHub Actions.
 *   `npm start` : Lance l'application en mode développement sur http://localhost:3000.
 *   `npm test` : Lance la suite complète de tests (Unitaires et Intégration) avec surveillance des fichiers.
 *   `npm run jsdoc` : Génère la documentation technique du code dans le dossier `./public/docs`.
+*   `npm run cypress` : Ouvre l'interface de test E2E Cypress.
 *   `npm run scenarios` : Exécute le script de démonstration des validateurs dans la console.
 
 ## Documentation
 
 *   [Détails Activité 1](https://github.com/PierreTDX/Test_et_Test_unitaire/blob/main/my-app/Activite1.md)
 *   [Détails Activité 2](https://github.com/PierreTDX/Test_et_Test_unitaire/blob/main/my-app/Activite2.md)
-*   [Détails Activité 3](https://github.com/PierreTDX/Test_et_Test_unitaire/blob/main/my-app/Activite3.md)
+*   [Détails Activité 3](https://github.com/PierreTDX/Test_et_Test_unitaire/blob/main/my-app/Activite3.md)  
+*   [Détails Activité 4](https://github.com/PierreTDX/Test_et_Test_unitaire/blob/main/my-app/Activite4.md)
 *   [Plan de Test](https://github.com/PierreTDX/Test_et_Test_unitaire/blob/main/my-app/TEST_PLAN.md)
 
 ---
