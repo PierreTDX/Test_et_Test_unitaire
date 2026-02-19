@@ -103,4 +103,20 @@ describe('Navigation & State Management Scenarios', () => {
         cy.contains('Morpheus').should('be.visible');
         cy.contains('Agent Smith').should('not.exist');
     });
+
+    it('404 Scenario: Navigation to unknown route', () => {
+        // 1. Visit a non-existent URL
+        cy.visit('/#/unknown-route');
+
+        // 2. Verify 404 page content
+        cy.contains('404').should('be.visible');
+        cy.contains('Page Not Found').should('be.visible');
+
+        // 3. Verify Back to Home button works
+        cy.contains('Back to Home').click();
+
+        // 4. Verify redirection to Home
+        cy.url().should('eq', Cypress.config().baseUrl + '/#/');
+        cy.contains('Registered Users').should('be.visible');
+    });
 });
