@@ -13,7 +13,12 @@ describe('RegistrationForm Integration Tests', () => {
     localStorage.clear();
   });
 
-  // Helper function to render component with router context
+  /**
+   * Helper function to render component with router context.
+   * Necessary because the component uses Link or useNavigate.
+   * @param {React.ReactNode} component - The component to render.
+   * @returns {Object} The render result from testing-library.
+   */
   const renderWithRouter = (component) => {
     return render(<MemoryRouter>{component}</MemoryRouter>);
   };

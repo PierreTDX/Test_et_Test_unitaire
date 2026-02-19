@@ -19,6 +19,7 @@ export class ValidationError extends Error {
  *
  * @param {object} p An object representing a person, implementing a birth Date parameter.
  * @return {number} The age in years of p.
+ * @throws {ValidationError} If params are missing, invalid type, or age < 18.
  */
 export function calculateAge(p) {
     if (!p) {
@@ -58,6 +59,7 @@ export function calculateAge(p) {
  *
  * @param {string} code The postal code to check.
  * @return {boolean} True if the postal code is valid.
+ * @throws {ValidationError} If code is missing, not a string, or invalid format.
  */
 export function validatePostalCode(code) {
     if (!code) {
@@ -77,6 +79,7 @@ export function validatePostalCode(code) {
  *
  * @param {string} name The name to check.
  * @return {boolean} True if the name is valid.
+ * @throws {ValidationError} If name is missing, not a string, or contains invalid characters.
  */
 export function validateIdentity(name) {
     if (!name) {
@@ -96,6 +99,7 @@ export function validateIdentity(name) {
  *
  * @param {string} email The email to check.
  * @return {boolean} True if the email is valid.
+ * @throws {ValidationError} If email is missing, not a string, or invalid format.
  */
 export function validateEmail(email) {
     if (!email) {
@@ -115,6 +119,7 @@ export function validateEmail(email) {
  *
  * @param {string} city The city to check.
  * @return {boolean} True if the city is valid.
+ * @throws {ValidationError} If city is missing, not a string, or contains invalid characters.
  */
 export function validateCity(city) {
     if (!city) {
@@ -134,6 +139,7 @@ export function validateCity(city) {
  *
  * @param {Object} formData The data to save.
  * @return {boolean} True if the save was successful.
+ * @throws {ValidationError} If localStorage access fails.
  */
 export function saveToLocalStorage(formData) {
     try {
@@ -153,6 +159,7 @@ export function saveToLocalStorage(formData) {
  * Retrieve data from localStorage.
  *
  * @return {Array} Array of records.
+ * @throws {ValidationError} If localStorage access fails.
  */
 export function getFromLocalStorage() {
     try {

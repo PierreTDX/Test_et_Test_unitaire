@@ -1,3 +1,8 @@
+/**
+ * @file index.js
+ * @description Entry point of the React application.
+ * Renders the App component into the DOM and configures the router.
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';

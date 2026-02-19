@@ -9,11 +9,13 @@ import '../styles/RegistrationForm.css';
 
 /**
  * Registration form component.
- * Handles user input, validation, and submission to local storage.
+ * Handles user input, validation, and submission to the parent component.
+ * It manages local state for form data, validation errors, and success messages.
  *
- * @memberof module:Components
- * @param {Object} props
- * @param {Function} props.onUserAdd - Function to call on successful registration
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.onUserAdd - Callback function executed upon successful registration.
+ *                                     Receives the user data object as an argument.
  * @returns {JSX.Element} The rendered registration form.
  */
 const RegistrationForm = ({ onUserAdd }) => {
@@ -143,7 +145,8 @@ const RegistrationForm = ({ onUserAdd }) => {
 
     /**
      * Handles form submission.
-     * Validates data, saves to local storage, and resets the form on success.
+     * Validates all fields, triggers the parent callback if valid,
+     * and resets the form state.
      *
      * @param {React.SyntheticEvent<HTMLFormElement>} e - The submission event.
      */

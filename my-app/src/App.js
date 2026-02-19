@@ -16,9 +16,11 @@ import './styles/App.css';
 
 /**
  * Main Application Component.
- * Handles shared state (list of users) and routing.
+ * Acts as the root component and state manager for the application.
+ * It handles the routing configuration and manages the shared state (list of users)
+ * across different pages.
  *
- * @memberof module:Components
+ * @component
  * @returns {JSX.Element} The rendered application.
  */
 function App() {
@@ -35,7 +37,12 @@ function App() {
     }
   }, []);
 
-  // Handler to add a new user (passed to RegistrationForm)
+  /**
+   * Handler to add a new user to the state and local storage.
+   * This function is passed down to the RegistrationForm component.
+   *
+   * @param {Object} newUser - The user object created by the registration form.
+   */
   const handleAddUser = (newUser) => {
     const userWithTimestamp = { ...newUser, timestamp: new Date().toISOString() };
     const updatedUsers = [...users, userWithTimestamp];

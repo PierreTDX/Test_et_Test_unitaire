@@ -1,3 +1,8 @@
+/**
+ * @file App.test.js
+ * @description Integration tests for the App component.
+ * Verifies routing logic, initial rendering, and full user flows.
+ */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from '../App';

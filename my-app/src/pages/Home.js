@@ -1,6 +1,7 @@
 /**
  * @file Home.js
  * @description Home page component displaying the list of registered users.
+ * It handles the display logic for empty states and populates user cards.
  */
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -8,11 +9,19 @@ import '../styles/Home.css';
 
 /**
  * Home Page Component.
- * Fetches and displays users from local storage.
+ * Receives the list of users from the parent component and displays them.
+ * It handles pluralization of the user count and renders a specific message if the list is empty.
  *
- * @memberof module:Components
- * @param {Object} props
- * @param {Array} props.users - List of registered users passed from App
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Array<Object>} props.users - List of registered users passed from App state.
+ * @param {string} props.users[].firstName - User's first name.
+ * @param {string} props.users[].lastName - User's last name.
+ * @param {string} props.users[].email - User's email address.
+ * @param {string} props.users[].birthDate - User's birth date (ISO string).
+ * @param {string} props.users[].city - User's city.
+ * @param {string} props.users[].postalCode - User's postal code.
+ * @param {string} props.users[].timestamp - Registration timestamp (ISO string).
  * @returns {JSX.Element} The rendered home page.
  */
 const Home = ({ users = [] }) => {

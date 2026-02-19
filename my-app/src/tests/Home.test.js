@@ -14,7 +14,12 @@ describe('Home Page Integration Tests', () => {
         jest.restoreAllMocks();
     });
 
-    // Helper to render with Router context (needed for <Link>)
+    /**
+     * Helper to render with Router context (needed for <Link>).
+     * Wraps the component in a MemoryRouter.
+     * @param {React.ReactNode} component - The component to render.
+     * @returns {Object} The render result.
+     */
     const renderWithRouter = (component) => {
         return render(<MemoryRouter>{component}</MemoryRouter>);
     };

@@ -1,3 +1,8 @@
+/**
+ * @file App.css
+ * @description Global styles for the application.
+ * Includes body reset, typography for titles, and shared button styles.
+ */
 body {
     margin: 0;
     padding: 0;
