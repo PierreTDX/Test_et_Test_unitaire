@@ -32,9 +32,9 @@ jobs:
           npm run build --if-present
           npm test
       - name: Cypress run
-        working-directory: ./my-app
         uses: cypress-io/github-action@v6
         with:
+          working-directory: ./my-app
           build: npm run build
           start: npm start
       - name: Upload coverage reports to Codecov
