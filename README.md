@@ -62,7 +62,8 @@ Mise en place d'une usine logicielle complète avec GitHub Actions.
 *   `npm start` : Lance l'application en mode développement sur http://localhost:3000.
 *   `npm test` : Lance la suite complète de tests (Unitaires et Intégration) avec surveillance des fichiers.
 *   `npm run jsdoc` : Génère la documentation technique du code dans le dossier `./public/docs`.
-*   `npm run cypress` : Ouvre l'interface de test E2E Cypress.
+*   `npm run cypress` : Ouvre l'interface de test E2E Cypress.  
+*   `npm run serve` : Construit et sert l'application localement (simule GitHub Pages).  
 *   `npm run scenarios` : Exécute le script de démonstration des validateurs dans la console.
 
 ## Documentation
