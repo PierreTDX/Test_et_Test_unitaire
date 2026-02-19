@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import RegistrationForm from './pages/RegistrationForm';
 import Home from './pages/Home';
+import NotFound from './pages/NotFound';
 import { getFromLocalStorage } from './utils/validator';
 import './styles/App.css';
 
@@ -55,6 +56,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home users={users} />} />
         <Route path="/registration" element={<RegistrationForm onUserAdd={handleAddUser} />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
