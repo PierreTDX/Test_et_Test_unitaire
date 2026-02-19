@@ -62,12 +62,10 @@
   margin-bottom: 20px;
 }
 
-.light-container {
-    h1 {
-        font-size: 4rem;
-        margin: 0;
-        text-indent: 0.15em;
-    }
+.light-container h1 {
+    font-size: 4rem;
+    margin: 0;
+    text-indent: 0.15em;
 }
 
 .not-found-container h2 {
@@ -90,10 +88,10 @@
 /* ── Responsive ── */
 @media (max-width: 540px) {
 
-  .light-container {
-        h1 {
-            font-size: 2.5rem;
-        }
+    .light-container h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        text-indent: 0.15em;
     }
 
   .not-found-container h2 {
