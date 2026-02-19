@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1771500404555" clover="3.2.0">
-  <project timestamp="1771500404555" name="All files">
-    <metrics statements="132" coveredstatements="130" conditionals="97" coveredconditionals="96" methods="21" coveredmethods="20" elements="250" coveredelements="246" complexity="0" loc="132" ncloc="132" packages="4" files="5" classes="5"/>
+<coverage generated="1771501029204" clover="3.2.0">
+  <project timestamp="1771501029204" name="All files">
+    <metrics statements="132" coveredstatements="132" conditionals="97" coveredconditionals="97" methods="21" coveredmethods="21" elements="250" coveredelements="250" complexity="0" loc="132" ncloc="132" packages="4" files="5" classes="5"/>
     <package name="src">
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="App.js" path="C:\Users\pierr\Documents\Ynov\Cours\Tests\Activite1\my-app\src\App.js">
@@ -10,18 +10,18 @@
       </file>
     </package>
     <package name="src.pages">
-      <metrics statements="70" coveredstatements="68" conditionals="50" coveredconditionals="49" methods="12" coveredmethods="11"/>
+      <metrics statements="70" coveredstatements="70" conditionals="50" coveredconditionals="50" methods="12" coveredmethods="12"/>
       <file name="Home.js" path="C:\Users\pierr\Documents\Ynov\Cours\Tests\Activite1\my-app\src\pages\Home.js">
-        <metrics statements="9" coveredstatements="7" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="2"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="18" count="4" type="stmt"/>
-        <line num="20" count="4" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
-        <line num="23" count="2" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="29" count="4" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
+        <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="13" type="stmt"/>
+        <line num="20" count="13" type="stmt"/>
+        <line num="21" count="7" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
+        <line num="23" count="6" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="29" count="13" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
       </file>
       <file name="RegistrationForm.js" path="C:\Users\pierr\Documents\Ynov\Cours\Tests\Activite1\my-app\src\pages\RegistrationForm.js">
         <metrics statements="61" coveredstatements="61" conditionals="48" coveredconditionals="48" methods="9" coveredmethods="9"/>
@@ -92,7 +92,7 @@
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="Home.css" path="C:\Users\pierr\Documents\Ynov\Cours\Tests\Activite1\my-app\src\styles\Home.css">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="1" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.utils">
