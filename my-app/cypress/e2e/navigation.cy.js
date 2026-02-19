@@ -119,4 +119,22 @@ describe('Navigation & State Management Scenarios', () => {
         cy.url().should('eq', Cypress.config().baseUrl + '/#/');
         cy.contains('Registered Users').should('be.visible');
     });
+
+    it('Static 404 Page: Verify content (simulates server 404)', () => {
+        // Visite directe du fichier statique (simule le comportement GitHub Pages)
+        cy.visit('/404.html', { failOnStatusCode: false });
+
+        // Vérification que c'est bien la page statique (via le titre <title>)
+        cy.title().should('eq', 'Page Not Found');
+
+        // Vérification des éléments visuels
+        cy.get('h1').should('contain', '404');
+        cy.contains('Page Not Found').should('be.visible');
+
+        // Vérification du bouton de retour
+        cy.contains('Back to Home').click();
+
+        // Vérification qu'on est bien revenu sur l'application React (Accueil)
+        cy.contains('Registered Users').should('be.visible');
+    });
 });
