@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      /* ── Global & Reset (from App.css) ── */
+      body {
+        margin: 0;
+        padding: 0;
+        background: #06080f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      /* ── Keyframes (from App.css) ── */
+      @keyframes glow-pulse {
+        0%, 100% { box-shadow: 0 0 5px rgba(0, 225, 255, 0.3), 0 0 20px rgba(0, 225, 255, 0.1); }
+        50% { box-shadow: 0 0 15px rgba(0, 225, 255, 0.5), 0 0 40px rgba(0, 225, 255, 0.2); }
+      }
+      @keyframes fade-slide-up {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes shimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+      }
+      @keyframes scan-line {
+        0% { top: -100%; }
+        100% { top: 200%; }
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+      }
+
+      /* ── Container (from NotFound.css) ── */
+      .not-found-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background: #06080f;
+        background-image:
+          radial-gradient(ellipse at 20% 50%, rgba(0, 225, 255, 0.04) 0%, transparent 60%),
+          radial-gradient(ellipse at 80% 20%, rgba(120, 0, 255, 0.04) 0%, transparent 60%);
+        font-family: 'Rajdhani', sans-serif;
+        color: #c8d6e5;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+      }
+
+      .not-found-container::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 225, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 225, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+        pointer-events: none;
+      }
+
+      .not-found-container::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: linear-gradient(transparent, rgba(0, 225, 255, 0.015), transparent);
+        animation: scan-line 8s linear infinite;
+        pointer-events: none;
+      }
+
+      /* ── Light Container (from NotFound.css) ── */
+      .light-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2.5rem;
+        border-radius: 16px;
+        background: rgba(10, 15, 30, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(0, 225, 255, 0.12);
+        position: relative;
+        animation: fade-slide-up 1s ease-out, glow-pulse 4s ease-in-out infinite;
+        margin-bottom: 20px;
+      }
+
+      /* ── Typography ── */
+      h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+        font-size: 4rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: transparent;
+        background: linear-gradient(135deg, #00e1ff, #7b2fff, #00e1ff);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: fade-slide-up 0.8s ease-out, shimmer 4s linear infinite;
+        margin: 0;
+        text-indent: 0.15em;
+      }
+
+      h2 {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+        font-size: 2rem;
+        letter-spacing: 0.1em;
+        color: #00e1ff;
+        margin: 0 0 1rem;
+        animation: fade-slide-up 1s ease-out;
+      }
+
+      p {
+        font-size: 1.2rem;
+        color: rgba(200, 214, 229, 0.7);
+        margin-bottom: 2rem;
+        animation: fade-slide-up 1.2s ease-out;
+      }
+
+      /* ── Button (from App.css) ── */
+      .submit-button {
+        position: relative;
+        z-index: 1;
+        display: inline-block;
+        padding: 0.85rem 2rem;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #06080f;
+        background: linear-gradient(135deg, #00e1ff, #00b4cc);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: float 3s ease-in-out infinite;
+        animation-delay: 1s;
+        overflow: hidden;
+      }
+
+      .submit-button::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.25) 50%, transparent 70%);
+        background-size: 200% 100%;
+        animation: shimmer 3s linear infinite;
+        border-radius: 8px;
+      }
+
+      .submit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(0, 225, 255, 0.4), 0 0 60px rgba(0, 225, 255, 0.15);
+        background: linear-gradient(135deg, #00f0ff, #00d4f0);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 540px) {
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.5rem; }
+        p { font-size: 1rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="not-found-container">
+      <div class="light-container">
+        <h1>404</h1>
+      </div>
+      <h2>Page Not Found</h2>
+      <p>Oops! This page does not exist on the server.</p>
+      <!-- Link returns to the GitHub Pages repository root -->
+      <a href="/Test_et_Test_unitaire/" class="submit-button">Back to Home</a>
+    </div>
+  </body>
+</html>
