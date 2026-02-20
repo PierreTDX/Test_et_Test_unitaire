@@ -132,4 +132,58 @@ describe('App Integration Tests', () => {
     expect(screen.getByText('404')).toBeInTheDocument();
     expect(screen.getByText(/Page Not Found/i)).toBeInTheDocument();
   });
+
+  test('displays specific error when API returns 400 (Email exists)', async () => {
+    // 1. Initial load
+    axios.get.mockResolvedValue({ data: [] });
+    // 2. Post response failure (400)
+    axios.post.mockRejectedValue({ response: { status: 400 } });
+
+    render(
+      <MemoryRouter initialEntries={['/registration']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    // Fill form
+    fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Jean' } });
+    fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Dupont' } });
+    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'duplicate@test.com' } });
+    fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: '1990-01-01' } });
+    fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Paris' } });
+    fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '75001' } });
+
+    fireEvent.click(screen.getByTestId('submit-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('submit-error')).toHaveTextContent('Email already exists');
+    });
+  });
+
+  test('displays server error when API returns 500', async () => {
+    axios.get.mockResolvedValue({ data: [] });
+    axios.post.mockRejectedValue({ response: { status: 500 } });
+
+    render(
+      <MemoryRouter initialEntries={['/registration']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    // Fill minimal valid form...
+    fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Jean' } });
+    // ... (supposons que les autres champs sont remplis ou optionnels pour simplifier le test, sinon copier le bloc du dessus)
+    // Pour la brièveté ici, je reprends la logique de remplissage complet :
+    fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Dupont' } });
+    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'test@test.com' } });
+    fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: '1990-01-01' } });
+    fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Paris' } });
+    fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '75001' } });
+
+    fireEvent.click(screen.getByTestId('submit-button'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('submit-error')).toHaveTextContent('Server is down');
+    });
+  });
 });

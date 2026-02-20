@@ -65,8 +65,17 @@ function App() {
       setError(null);
     } catch (err) {
       console.error("Error adding user", err);
-      setError("Failed to save user to API");
-      throw err;
+
+      let errorMessage = "Failed to save user to API";
+      if (err.response) {
+        if (err.response.status === 400) {
+          errorMessage = "Email already exists"; // Erreur Métier
+        } else if (err.response.status === 500) {
+          errorMessage = "Server is down. Please try again later."; // Crash Serveur
+        }
+      }
+      // On relance l'erreur avec le message précis pour que le formulaire l'affiche
+      throw new Error(errorMessage);
     }
   };
 

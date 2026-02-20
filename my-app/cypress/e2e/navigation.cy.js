@@ -159,4 +159,49 @@ describe('Navigation & State Management Scenarios', () => {
         cy.url().should('eq', Cypress.config().baseUrl + '/#/');
         cy.contains('Registered Users').should('be.visible');
     });
+
+    it('Handles 400 Bad Request (Email exists)', () => {
+        // 1. Navigate to Registration
+        cy.visit('/#/registration');
+
+        // 2. Intercept POST to return 400
+        cy.intercept('POST', '**/users', {
+            statusCode: 400,
+            body: { message: 'Email already exists' }
+        }).as('addUserError');
+
+        // 3. Fill form
+        cy.get('[data-testid="firstName-input"]').type('Neo');
+        cy.get('[data-testid="lastName-input"]').type('Anderson');
+        cy.get('[data-testid="email-input"]').type('duplicate@matrix.com');
+        cy.get('[data-testid="birthDate-input"]').type('1990-01-01');
+        cy.get('[data-testid="city-input"]').type('Zion');
+        cy.get('[data-testid="postalCode-input"]').type('10101');
+
+        cy.get('[data-testid="submit-button"]').click();
+        cy.wait('@addUserError');
+
+        // 4. Verify Error Toast
+        cy.get('[data-testid="submit-error"]').should('contain', 'Email already exists');
+    });
+
+    it('Handles 500 Server Error', () => {
+        cy.visit('/#/registration');
+
+        cy.intercept('POST', '**/users', {
+            statusCode: 500
+        }).as('addUserServerCrash');
+
+        cy.get('[data-testid="firstName-input"]').type('Neo');
+        cy.get('[data-testid="lastName-input"]').type('Anderson');
+        cy.get('[data-testid="email-input"]').type('crash@matrix.com');
+        cy.get('[data-testid="birthDate-input"]').type('1990-01-01');
+        cy.get('[data-testid="city-input"]').type('Zion');
+        cy.get('[data-testid="postalCode-input"]').type('10101');
+
+        cy.get('[data-testid="submit-button"]').click();
+        cy.wait('@addUserServerCrash');
+
+        cy.get('[data-testid="submit-error"]').should('contain', 'Server is down');
+    });
 });
