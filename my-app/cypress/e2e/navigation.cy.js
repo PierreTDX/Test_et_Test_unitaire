@@ -22,7 +22,7 @@ describe('Navigation & State Management Scenarios', () => {
     it('Nominal Scenario: Valid user addition and persistence check', () => {
         // 1. Navigate to Home (/)
         cy.visit('/');
-        cy.wait('@getUsers');
+        cy.wait('@getUsers').its('response.statusCode').should('eq', 200);
 
         // Verify "0 registered users" and empty list (users = [])
         cy.contains('No users registered yet').should('be.visible');
@@ -45,7 +45,7 @@ describe('Navigation & State Management Scenarios', () => {
         cy.get('[data-testid="submit-button"]').click();
 
         // Wait for API call
-        cy.wait('@addUser');
+        cy.wait('@addUser').its('response.statusCode').should('eq', 201);
 
         // Verify success message
         cy.get('[data-testid="success-message"]').should('contain', 'Registration successful');
@@ -203,5 +203,17 @@ describe('Navigation & State Management Scenarios', () => {
         cy.wait('@addUserServerCrash');
 
         cy.get('[data-testid="submit-error"]').should('contain', 'Server is down');
+    });
+
+    it('Handles 500 Server Error on Initial Load', () => {
+        // Simulate server crash on initial data fetch
+        cy.intercept('GET', '**/users', {
+            statusCode: 500
+        }).as('getUsersError');
+
+        cy.visit('/');
+        cy.wait('@getUsersError');
+
+        cy.get('[data-testid="global-error-toast"]').should('contain', 'Server is down');
     });
 });

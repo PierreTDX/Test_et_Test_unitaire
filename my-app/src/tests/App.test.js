@@ -85,6 +85,20 @@ describe('App Integration Tests', () => {
     consoleSpy.mockRestore();
   });
 
+  test('displays server error when API returns 500 on initial load', async () => {
+    // Mock API failure with 500 status
+    axios.get.mockRejectedValue({ response: { status: 500 } });
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    // Verify specific server error message
+    expect(await screen.findByText(/Server is down/i)).toBeInTheDocument();
+  });
+
   test('full registration flow updates user list', async () => {
     // 1. Initial load (empty)
     axios.get.mockResolvedValueOnce({ data: [] });

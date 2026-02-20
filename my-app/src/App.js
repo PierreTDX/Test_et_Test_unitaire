@@ -41,7 +41,11 @@ function App() {
         setError(null);
       } catch (err) {
         console.error("Error loading initial data", err);
-        setError("Failed to load users from API");
+        let errorMessage = "Failed to load users from API";
+        if (err.response && err.response.status === 500) {
+          errorMessage = "Server is down. Please try again later.";
+        }
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -93,6 +97,7 @@ function App() {
           message={error}
           type="error"
           onClose={() => setError(null)}
+          data-testid="global-error-toast"
         />
         <Toast
           message={loading ? "Synchronizing with Matrix..." : null}
