@@ -26,6 +26,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
         env:
           REACT_APP_API_URL: https://jsonplaceholder.typicode.com
+          REACT_APP_API_TOKEN: fack-token-for-exercise-to-put-in-secrets
       - name: npm ci, build and test
         working-directory: ./my-app
         run: |

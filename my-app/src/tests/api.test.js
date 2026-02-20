@@ -20,23 +20,40 @@ describe('API Service Configuration', () => {
 
     test('uses default URL if env var is missing', async () => {
         delete process.env.REACT_APP_API_URL;
+        delete process.env.REACT_APP_API_TOKEN;
         const { getUsers } = require('../services/api');
         const axiosMock = require('axios');
 
         axiosMock.get.mockResolvedValue({ data: [] });
         await getUsers();
 
-        expect(axiosMock.get).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/users');
+        // Expect undefined as second arg because no token
+        expect(axiosMock.get).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/users', undefined);
     });
 
     test('uses env var URL if present', async () => {
         process.env.REACT_APP_API_URL = 'http://custom-api.com';
+        delete process.env.REACT_APP_API_TOKEN;
         const { getUsers } = require('../services/api');
         const axiosMock = require('axios');
 
         axiosMock.get.mockResolvedValue({ data: [] });
         await getUsers();
 
-        expect(axiosMock.get).toHaveBeenCalledWith('http://custom-api.com/users');
+        expect(axiosMock.get).toHaveBeenCalledWith('http://custom-api.com/users', undefined);
+    });
+
+    test('uses API token in headers if present', async () => {
+        process.env.REACT_APP_API_TOKEN = 'secret-token-123';
+        const { getUsers } = require('../services/api');
+        const axiosMock = require('axios');
+
+        axiosMock.get.mockResolvedValue({ data: [] });
+        await getUsers();
+
+        expect(axiosMock.get).toHaveBeenCalledWith(
+            expect.any(String),
+            { headers: { Authorization: 'Bearer secret-token-123' } }
+        );
     });
 });
