@@ -69,12 +69,12 @@ function App() {
       let errorMessage = "Failed to save user to API";
       if (err.response) {
         if (err.response.status === 400) {
-          errorMessage = "Email already exists"; // Erreur Métier
+          errorMessage = "Email already exists"; // Error e-mail already exist
         } else if (err.response.status === 500) {
-          errorMessage = "Server is down. Please try again later."; // Crash Serveur
+          errorMessage = "Server is down. Please try again later."; // server is down
         }
       }
-      // On relance l'erreur avec le message précis pour que le formulaire l'affiche
+      // Throwing an error here will be caught by the RegistrationForm's try-catch and displayed as a Toast message.
       throw new Error(errorMessage);
     }
   };

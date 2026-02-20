@@ -12,4 +12,9 @@ export const addUser = async (user) => {
     return response.data;
 };
 
-export default { getUsers, addUser };
+const api = {
+    getUsers,
+    addUser,
+};
+
+export default api;
