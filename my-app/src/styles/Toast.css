@@ -1,0 +1,112 @@
+/**
+ * @file Toast.css
+ * @description Styles for the reusable Toast component.
+ * Supports error, success, and loading states with Cyberpunk aesthetics.
+ */
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none; /* Allows clicking through the container area */
+}
+
+.toast {
+    pointer-events: auto;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    background: rgba(10, 15, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    color: #e8f0fe;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    animation: toast-slide-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ── Animations ── */
+@keyframes toast-slide-in {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ── Variants ── */
+
+/* Error */
+.toast-error {
+    border-color: rgba(255, 50, 80, 0.5);
+    box-shadow: 0 0 15px rgba(255, 50, 80, 0.15);
+}
+.toast-error::before {
+    content: '!';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 50, 80, 0.2);
+    color: #ff3250;
+    border-radius: 50%;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+}
+
+/* Success */
+.toast-success {
+    border-color: rgba(0, 255, 178, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 178, 0.15);
+}
+.toast-success::before {
+    content: '✓';
+    color: #00ffb2;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Loading */
+.toast-loading {
+    border-color: rgba(0, 225, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 225, 255, 0.15);
+}
+.toast-loading::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 225, 255, 0.3);
+    border-top-color: #00e1ff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* ── Close Button ── */
+.toast-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.toast-close:hover {
+    color: #fff;
+}

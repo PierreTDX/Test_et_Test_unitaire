@@ -8,11 +8,21 @@ describe('Navigation & State Management Scenarios', () => {
     // Reset state before each test to ensure isolation
     beforeEach(() => {
         cy.clearLocalStorage();
+
+        // Intercept GET users (Initial load) - Return empty list by default
+        cy.intercept('GET', '**/users', { body: [] }).as('getUsers');
+
+        // Intercept POST users (Registration)
+        cy.intercept('POST', '**/users', {
+            statusCode: 201,
+            body: { id: 101 } // JSONPlaceholder style response
+        }).as('addUser');
     });
 
     it('Nominal Scenario: Valid user addition and persistence check', () => {
         // 1. Navigate to Home (/)
         cy.visit('/');
+        cy.wait('@getUsers');
 
         // Verify "0 registered users" and empty list (users = [])
         cy.contains('No users registered yet').should('be.visible');
@@ -34,6 +44,9 @@ describe('Navigation & State Management Scenarios', () => {
         // Submission
         cy.get('[data-testid="submit-button"]').click();
 
+        // Wait for API call
+        cy.wait('@addUser');
+
         // Verify success message
         cy.get('[data-testid="success-message"]').should('contain', 'Registration successful');
 
@@ -50,7 +63,7 @@ describe('Navigation & State Management Scenarios', () => {
 
     it('Error Scenario: Invalid addition attempt and integrity check', () => {
         // Prerequisite: Simulate previous state (1 registered) by injecting data
-        // into localStorage before loading the page.
+        // via network intercept (for UI) and localStorage (for validator)
         const existingUser = [{
             firstName: 'Morpheus',
             lastName: 'Nebuchadnezzar',
@@ -61,12 +74,18 @@ describe('Navigation & State Management Scenarios', () => {
             timestamp: new Date().toISOString()
         }];
 
+        // Override the default intercept for this test (Simulate API returning 1 user)
+        cy.intercept('GET', '**/users', { body: existingUser }).as('getExistingUsers');
+
+        // Inject into localStorage because validator.js checks uniqueness against LS
         cy.window().then((win) => {
             win.localStorage.setItem('registrations', JSON.stringify(existingUser));
         });
 
         // 1. Navigate to Home (/) with pre-loaded state
         cy.visit('/');
+        cy.wait('@getExistingUsers');
+
         cy.contains('1 registered user').should('be.visible');
         cy.get('.user-card').should('have.length', 1);
         cy.contains('Morpheus').should('be.visible');

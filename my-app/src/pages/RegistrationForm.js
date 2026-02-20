@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { validateIdentity, validateEmail, validatePostalCode, validateCity, calculateAge } from '../utils/validator.js';
+import Toast from '../components/Toast';
 import '../styles/RegistrationForm.css';
 
 /**
@@ -16,9 +17,10 @@ import '../styles/RegistrationForm.css';
  * @param {Object} props - The component props.
  * @param {Function} props.onUserAdd - Callback function executed upon successful registration.
  *                                     Receives the user data object as an argument.
+ * @param {Array} [props.existingUsers] - List of existing users to check for duplicates.
  * @returns {JSX.Element} The rendered registration form.
  */
-const RegistrationForm = ({ onUserAdd }) => {
+const RegistrationForm = ({ onUserAdd, existingUsers = [] }) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -30,6 +32,7 @@ const RegistrationForm = ({ onUserAdd }) => {
 
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     /**
      * Handles input changes.
@@ -70,7 +73,7 @@ const RegistrationForm = ({ onUserAdd }) => {
         try {
             if (name === 'firstName') validateIdentity(value);
             if (name === 'lastName') validateIdentity(value);
-            if (name === 'email') validateEmail(value);
+            if (name === 'email') validateEmail(value, existingUsers);
             if (name === 'postalCode') validatePostalCode(value);
             if (name === 'city') validateCity(value);
             if (name === 'birthDate') calculateAge({ birth: new Date(value) });
@@ -117,7 +120,7 @@ const RegistrationForm = ({ onUserAdd }) => {
         }
 
         try {
-            validateEmail(data.email);
+            validateEmail(data.email, existingUsers);
         } catch (e) {
             errors.email = e.message;
         }
@@ -150,16 +153,17 @@ const RegistrationForm = ({ onUserAdd }) => {
      *
      * @param {React.SyntheticEvent<HTMLFormElement>} e - The submission event.
      */
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const validation = validateForm(formData);
 
         if (validation.isValid) {
+            setIsSubmitting(true);
             try {
-                // call onUserAdd to update App's state and localStorage
+                // call onUserAdd to update App's state and API
                 if (onUserAdd) {
-                    onUserAdd(formData);
+                    await onUserAdd(formData);
                 }
                 setSuccessMessage('Registration successful!');
                 setErrors({});
@@ -174,6 +178,8 @@ const RegistrationForm = ({ onUserAdd }) => {
                 });
             } catch (e) {
                 setErrors({ submit: e.message });
+            } finally {
+                setIsSubmitting(false);
             }
         } else {
             setErrors(validation.errors);
@@ -185,11 +191,33 @@ const RegistrationForm = ({ onUserAdd }) => {
         <div className="registration-form-container">
             <h1>Registration Form</h1>
 
-            {successMessage && (
-                <div className="success-message" data-testid="success-message">
-                    {successMessage}
-                </div>
-            )}
+            {/* Boutons de test pour les Toasts */}
+            {/* <div style={{ position: 'fixed', top: 10, left: 10, zIndex: 10000, display: 'flex', gap: '5px' }}>
+                <button type="button" onClick={() => setIsSubmitting(prev => !prev)}>Toggle Loading</button>
+                <button type="button" onClick={() => setErrors(prev => ({ ...prev, submit: "Erreur critique simulée !" }))}>Trigger Error</button>
+                <button type="button" onClick={() => setSuccessMessage("Opération réussie !")}>Trigger Success</button>
+                <button type="button" onClick={() => { setErrors({}); setSuccessMessage(''); setIsSubmitting(false); }}>Clear All</button>
+            </div> */}
+
+            <div className="toast-container">
+                <Toast
+                    message={successMessage}
+                    type="success"
+                    onClose={() => setSuccessMessage('')}
+                    data-testid="success-message"
+                />
+                <Toast
+                    message={errors.submit}
+                    type="error"
+                    onClose={() => setErrors(prev => ({ ...prev, submit: null }))}
+                    data-testid="submit-error"
+                />
+                <Toast
+                    message={isSubmitting ? "Registration in progress..." : null}
+                    type="loading"
+                    data-testid="loading-toast"
+                />
+            </div>
 
             <form onSubmit={handleSubmit} className="registration-form">
                 <div className="form-group">
@@ -308,13 +336,7 @@ const RegistrationForm = ({ onUserAdd }) => {
                     )}
                 </div>
 
-                {errors.submit && (
-                    <div className="error-message" data-testid="submit-error">
-                        {errors.submit}
-                    </div>
-                )}
-
-                <button type="submit" className="submit-button" data-testid="submit-button" disabled={!isFormValid()}>
+                <button type="submit" className="submit-button" data-testid="submit-button" disabled={!isFormValid() || isSubmitting}>
                     Register
                 </button>
             </form>

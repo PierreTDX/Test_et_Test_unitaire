@@ -40,15 +40,26 @@ const Home = ({ users = [] }) => {
                         <p>No users registered yet.</p>
                     </div>
                 ) : (
-                    users.map((user, index) => (
-                        <div key={index} className="user-card">
-                            <h3>{user.firstName} {user.lastName}</h3>
-                            <p><strong>Email:</strong> {user.email}</p>
-                            <p><strong>Birth Date:</strong> {new Date(user.birthDate).toLocaleDateString()}</p>
-                            <p><strong>Location:</strong> {user.postalCode} {user.city}</p>
-                            <p className="user-date">Registered: {new Date(user.timestamp).toLocaleDateString()}</p>
-                        </div>
-                    ))
+                    users.map((user, index) => {
+                        // serialize user data for display, handling both API and local formats
+                        const displayName = user.name || `${user.firstName} ${user.lastName}`;
+                        const displayCity = user.address?.city || user.city;
+                        const displayZip = user.address?.zipcode || user.postalCode;
+
+                        return (
+                            <div key={index} className="user-card">
+                                <h3>{displayName}</h3>
+                                <p><strong>Email:</strong> {user.email}</p>
+                                {user.birthDate && (
+                                    <p><strong>Birth Date:</strong> {new Date(user.birthDate).toLocaleDateString()}</p>
+                                )}
+                                <p><strong>Location:</strong> {displayZip} {displayCity}</p>
+                                {user.timestamp && (
+                                    <p className="user-date">Registered: {new Date(user.timestamp).toLocaleDateString()}</p>
+                                )}
+                            </div>
+                        );
+                    })
                 )}
             </div>
 

@@ -7,7 +7,8 @@ import { Routes, Route } from 'react-router-dom';
 import RegistrationForm from './pages/RegistrationForm';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-import { getFromLocalStorage } from './utils/validator';
+import { getUsers, addUser } from './services/api';
+import Toast from './components/Toast';
 import './styles/App.css';
 
 /**
@@ -27,35 +28,72 @@ import './styles/App.css';
 function App() {
   // Shared state: List of registered users
   const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // Load initial data from localStorage
+  // Load initial data from API
   useEffect(() => {
-    try {
-      const data = getFromLocalStorage();
-      setUsers(data);
-    } catch (error) {
-      console.error("Error loading initial data", error);
-    }
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        const data = await getUsers();
+        setUsers(data);
+        setError(null);
+      } catch (err) {
+        console.error("Error loading initial data", err);
+        setError("Failed to load users from API");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUsers();
   }, []);
+  console.log("Current users in state:", users);
 
   /**
-   * Handler to add a new user to the state and local storage.
+   * Handler to add a new user to the state and API.
    * This function is passed down to the RegistrationForm component.
    *
    * @param {Object} newUser - The user object created by the registration form.
    */
-  const handleAddUser = (newUser) => {
+  const handleAddUser = async (newUser) => {
     const userWithTimestamp = { ...newUser, timestamp: new Date().toISOString() };
-    const updatedUsers = [...users, userWithTimestamp];
-    setUsers(updatedUsers);
-    localStorage.setItem('registrations', JSON.stringify(updatedUsers));
+
+    try {
+      const savedUser = await addUser(userWithTimestamp);
+      setUsers([...users, { ...userWithTimestamp, ...savedUser }]);
+      setError(null);
+    } catch (err) {
+      console.error("Error adding user", err);
+      setError("Failed to save user to API");
+      throw err;
+    }
   };
 
   return (
     <div className="App">
+      {/* Boutons de test pour les Toasts */}
+      {/* <div style={{ position: 'fixed', top: 10, left: 10, zIndex: 10000, display: 'flex', gap: '5px' }}>
+        <button onClick={() => setLoading(!loading)}>Toggle Loading</button>
+        <button onClick={() => setError("Erreur critique du système !")}>Trigger Error</button>
+        <button onClick={() => setError(null)}>Clear Error</button>
+      </div> */}
+
+      <div className="toast-container">
+        <Toast
+          message={error}
+          type="error"
+          onClose={() => setError(null)}
+        />
+        <Toast
+          message={loading ? "Synchronizing with Matrix..." : null}
+          type="loading"
+        />
+      </div>
+
       <Routes>
         <Route path="/" element={<Home users={users} />} />
-        <Route path="/registration" element={<RegistrationForm onUserAdd={handleAddUser} />} />
+        <Route path="/registration" element={<RegistrationForm onUserAdd={handleAddUser} existingUsers={users} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

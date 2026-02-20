@@ -190,6 +190,32 @@ describe('RegistrationForm Integration Tests', () => {
     expect(mockOnUserAdd).toHaveBeenCalled();
   });
 
+  test('displays loading toast during submission', async () => {
+    // Mock a slow API call (100ms delay)
+    const mockOnUserAdd = jest.fn().mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100)));
+    renderWithRouter(<RegistrationForm onUserAdd={mockOnUserAdd} />);
+
+    const validDate = new Date();
+    validDate.setFullYear(validDate.getFullYear() - 20);
+    const dateString = validDate.toISOString().split('T')[0];
+
+    fireEvent.change(screen.getByTestId('firstName-input'), { target: { value: 'Jean' } });
+    fireEvent.change(screen.getByTestId('lastName-input'), { target: { value: 'Dupont' } });
+    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'jean@example.com' } });
+    fireEvent.change(screen.getByTestId('birthDate-input'), { target: { value: dateString } });
+    fireEvent.change(screen.getByTestId('city-input'), { target: { value: 'Paris' } });
+    fireEvent.change(screen.getByTestId('postalCode-input'), { target: { value: '75001' } });
+
+    fireEvent.click(screen.getByTestId('submit-button'));
+
+    expect(screen.getByTestId('loading-toast')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-toast')).toHaveTextContent('Registration in progress...');
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-toast')).not.toBeInTheDocument();
+    });
+  });
+
   test('resets form after successful submission', async () => {
     const mockOnUserAdd = jest.fn();
     renderWithRouter(<RegistrationForm onUserAdd={mockOnUserAdd} />);
